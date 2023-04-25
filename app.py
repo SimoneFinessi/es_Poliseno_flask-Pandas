@@ -6,7 +6,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import io
-
+import squarify  
 app = Flask(__name__)
 
 df=pd.read_csv("https://raw.githubusercontent.com/prasertcbs/basic-dataset/master/metacritic_games.csv")
@@ -66,5 +66,30 @@ def ris5():
     trovato=giochi[giochi.game>=minimo].to_html()
     return render_template('risultato.html',risultato=trovato)
 
+#es6
+@app.route('/es6')
+def es6():
+    return render_template('es6.html')
+
+@app.route('/img1')
+def img1():
+    giochi=df.groupby("platform")[["game"]].count().reset_index()
+    fig,ax=plt.subplots()
+    ax.pie(giochi["game"], labels = giochi.platform)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
+    
+
+@app.route('/img2')
+def img2():
+    giochi=df.groupby("platform")[["game"]].count().reset_index()
+    fig,ax=plt.subplots()
+    squarify.plot(sizes=giochi['game'], label=giochi['platform'] )
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
+
+    
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=3245, debug=True)
