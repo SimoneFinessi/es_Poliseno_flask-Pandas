@@ -54,7 +54,17 @@ def es4():
     trovato=df.groupby("platform")[["game"]].count().to_html()
     return render_template('risultato.html',risultato=trovato)
 
+#es5
+@app.route('/es5')
+def es5():
+    return render_template('es5.html')
 
+@app.route('/ris5', methods=["post"])
+def ris5():
+    minimo=int(request.form["minimo"])
+    giochi=df.groupby("platform")[["game"]].count().reset_index()
+    trovato=giochi[giochi.game>=minimo].to_html()
+    return render_template('risultato.html',risultato=trovato)
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=3245, debug=True)
