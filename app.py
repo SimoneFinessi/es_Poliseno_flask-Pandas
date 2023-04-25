@@ -89,7 +89,45 @@ def img2():
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')
+#es7
+@app.route('/es7')
+def es7():
+    return render_template('es7.html')
 
+@app.route('/ris7', methods=["post"])
+def ris7():
+    piattaforma=request.form["piatt"]
+    genere=request.form["genere"]
+    trovato=df[(df.platform.str.lower()==piattaforma.lower())&(df.genre.str.lower().str.contains(genere.lower()))].to_html()
+    return render_template('risultato.html',risultato=trovato)
+
+#es8
+@app.route('/es8')
+def es8():
+    games_per_platform = df.groupby(['platform', 'genre']).size().reset_index(name='counts')
+    ciao=pd.DataFrame()
+    ciao=games_per_platform.groupby('platform')[['counts']].apply(lambda x: 100 * x / x.sum())
+    trovato=ciao.to_html()
+    return render_template('risultato.html',risultato=trovato)
+
+#es9
+@app.route('/es9')
+def es9():
+    return render_template('es9.html')
+
+@app.route('/img1Es9')
+def img1Es9():
+    games_per_platform = df.groupby(['platform', 'genre']).size().reset_index(name='counts')
+    ciao=pd.DataFrame()
+    ciao=games_per_platform.groupby('platform')[['counts']].apply(lambda x: 100 * x / x.sum())
     
+    fig ,ax =plt.subplots()
+    ax.pie(ciao["counts"],labels=games_per_platform["platform"]+" "+games_per_platform["genre"])
+
+
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
+
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=3245, debug=True)
