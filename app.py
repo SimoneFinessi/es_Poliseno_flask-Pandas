@@ -48,5 +48,13 @@ def es3():
     trovato=df[df.metascore + df.user_score==max(lista)].to_html()
     return render_template('risultato.html',risultato=trovato)
 
+#es4
+@app.route('/es4')
+def es4():
+    trovato=df.groupby("platform")[["game"]].count().to_html()
+    return render_template('risultato.html',risultato=trovato)
+
+
+
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=3245, debug=True)
