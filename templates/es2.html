@@ -5,11 +5,11 @@
     <body>
        
         
-        <form action="/ris1" method = "post">
+        <form action="/ris2" method = "post">
             
-                {% for genere in list %}
-                <input type="radio" name="piatt" value="{{genere}}">{{genere}}<br>
-                {% endfor %}
+                
+                <input type="text" name="massimo" >inserisci l'anno massimo<br>
+                <input type="text" name="minimo" >inserisci l'anno minimo<br>
             
             <p><input type = "submit" value = "Clicca per conoscere i dati" /></p>
         </form>
