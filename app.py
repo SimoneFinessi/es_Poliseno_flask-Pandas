@@ -25,6 +25,20 @@ def ris1():
     trovato=df[df.platform.str.lower()==piatta.lower()].to_html()
     return render_template('risultato.html',risultato=trovato)
 
+#es1 versione2
+@app.route('/es1_v2')
+def es1_v2():
+    return render_template('es1_v2.html',list=df["platform"].unique())
+
+@app.route('/ris1_v2', methods=["post"])
+def ris1_v2():
+    piatta=request.form.getlist("piatt")
+    trovato=pd.DataFrame()
+    for i in piatta:
+        giochi=df[df.platform.str.lower()==i.lower()]
+        trovato=pd.concat([trovato, giochi])
+    trovato=trovato.to_html()
+    return render_template('risultato.html',risultato=trovato)
 #es2
 @app.route('/es2')
 def es2():
@@ -120,7 +134,7 @@ def img1Es9():
     games_per_platform = df.groupby(['platform', 'genre']).size().reset_index(name='counts')
     ciao=pd.DataFrame()
     ciao=games_per_platform.groupby('platform')[['counts']].apply(lambda x: 100 * x / x.sum())
-    
+
     fig ,ax =plt.subplots()
     ax.pie(ciao["counts"],labels=games_per_platform["platform"]+" "+games_per_platform["genre"])
 
